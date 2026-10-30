@@ -1,11 +1,13 @@
 
 import os
 import json
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from google import genai
 from flask import Flask, render_template, request,session
 
-load_dotenv()
+print("ENV PATH:", find_dotenv(), flush=True)
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+print("API KEY LOADED:", bool(os.getenv("GEMINI_API_KEY")), flush=True)
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
@@ -61,7 +63,7 @@ def home():
         student_answer = request.form.get("student_answer", "")
 
         if not question_data:
-            feedback = "請先產生題目。"
+            feedback = "目前尚未產生題目，請先點擊幫我出題。"
         else:
             question_text = question_data["question"]
 
